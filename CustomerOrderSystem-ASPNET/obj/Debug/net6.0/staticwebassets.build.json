@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "42/nRcOmRd/eVeojRDY4rC40PrZFh1TmjE8ZBvK89jo=",
+  "Source": "CustomerOrderSystem-ASPNET",
+  "BasePath": "_content/CustomerOrderSystem-ASPNET",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
