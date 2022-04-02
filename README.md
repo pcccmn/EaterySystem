@@ -17,8 +17,9 @@ When customers arrive at the restaurant, they are told to scan a QR code to plac
 
 The scanned QR code redirects them to the app.
 
-In the app, they can see the menu (fetched from DB), and also see what everyone else has ordered on the same table. 
+In the app, they can see the list of food/beverages available.
 
+Once they're done browsing, they can place the order and the restaurant is then notified.
 
 ## Technical Explanation ##
 
