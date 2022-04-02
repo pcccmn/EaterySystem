@@ -2,13 +2,25 @@
 
 A small demo of my basic understanding in 7 different techs, namely:
 
-ReactJS (JS)
-Nginx,
-Spring Boot,
-ASP.NET,
-Node JS Express,
-MySQL,
-Docker
+1. ReactJS (JS)
+2. Nginx,
+3. Spring Boot,
+4. ASP.NET,
+5. Node JS Express,
+6. MySQL,
+7. Docker
+
+## Scenario ##
+Let's say, I run an online restaurant order system.
+
+When customers arrive at the restaurant, they are told to scan a QR code to place their orders.
+
+The scanned QR code redirects them to the app.
+
+In the app, they can see the menu (fetched from DB), and also see what everyone else has ordered on the same table. 
+
+
+## Technical Explanation ##
 
 The client (ReactJS) forwards it's request to the the load balancer (Nginx).
 
@@ -19,12 +31,6 @@ All 3 servers perform have the same functions, just written in different framewo
 All servers communicates with one database, the MySQL.
 
 All of the applications is then Dockerized.
-
-Context:
-Let's say, I run an online restaurant order system.
-When customers arrive at the restaurant, they are told to scan a QR code to place their orders.
-The scanned QR code redirects them to the app.
-In the app, they can see the menu (fetched from DB), and also see what everyone else has ordered on the same table. 
 
 
 
