@@ -1,9 +1,5 @@
 version: '3.9'
 
-networks:
-  alakazam:
-    external: true
-
 services:
 
   reverse-proxy:
@@ -26,6 +22,3 @@ services:
         MYSQL_ROOT_PASSWORD: "root"        
     ports:
     - "3307:3306"
-
-    
-    
