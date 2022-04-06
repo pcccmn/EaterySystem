@@ -1,0 +1,35 @@
+### Get menu from a restaurant
+GET http://localhost:3000/api/menu/asd
+
+### Create new order
+POST http://localhost:3000/api/order/new
+content-Type: application/json
+
+{
+    "restaurant_id":1,
+    "table_number":5,
+    "foods":[
+        {
+            "food_id":1,
+            "quantity":1
+        },
+        {
+            "food_id":2,
+            "quantity":2
+        }
+    ]
+}
+
+
+###
+GET http://localhost:3000/api/orders
+
+###
+POST http://localhost:3000/api/orders
+Content-Type: application/json
+
+{
+    "restaurant_id" : 1,
+    "table_number": 5,
+    "food_id": 4
+}

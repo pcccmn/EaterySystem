@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model menu {
+  id             Int             @id @default(autoincrement())
+  restaurant_id  Int?
+  food_id        Int?
+  price          Float?
+  ref_food       ref_food?       @relation(fields: [food_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk-menu-food")
+  ref_restaurant ref_restaurant? @relation(fields: [restaurant_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk-menu-restaurant")
+
+  @@index([food_id], map: "fk-menu-food")
+  @@index([restaurant_id], map: "fk-menu-restaurant")
+}
+
+model order {
+  id             Int             @id @default(autoincrement())
+  restaurant_id  Int?
+  table_number   Int?
+  food_id        Int?
+  quantity       Int?
+  is_active      Int?
+  ref_food       ref_food?       @relation(fields: [food_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk-order-food")
+  ref_restaurant ref_restaurant? @relation(fields: [restaurant_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk-order-restaurant")
+
+  @@index([food_id], map: "fk-order-food")
+  @@index([restaurant_id], map: "fk-order-restaurant")
+}
+
+model ref_food {
+  id    Int     @id @default(autoincrement())
+  name  String? @db.VarChar(255)
+  menu  menu[]
+  order order[]
+}
+
+model ref_restaurant {
+  id    Int     @id @default(autoincrement())
+  name  String? @db.VarChar(255)
+  code  String? @db.VarChar(255)
+  menu  menu[]
+  order order[]
+}

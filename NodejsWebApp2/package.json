@@ -1,19 +1,24 @@
 {
-  "name": "nodejs-web-app1",
-  "version": "0.0.0",
-  "description": "NodejsWebApp1",
-  "main": "server.js",
+  "name": "nodejswebapp2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
   "scripts": {
-    "devStart": "nodemon server.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
-  "author": {
-    "name": ""
-  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
   "dependencies": {
-    "ejs": "^3.1.6",
-    "express": "^4.17.3"
+    "@prisma/client": "^3.11.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "http-errors": "^2.0.0",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "prisma": "^3.11.1"
   }
 }
