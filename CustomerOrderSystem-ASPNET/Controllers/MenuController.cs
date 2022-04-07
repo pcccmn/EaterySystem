@@ -1,5 +1,8 @@
 ﻿using CustomerOrderSystem_ASPNET.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,40 +19,17 @@ namespace CustomerOrderSystem_ASPNET.Controllers
             this.db = context;
         }
 
-        // GET: api/<MenuController>
-        [HttpGet]
-        public IEnumerable<Menu> Get()
+        // GET api/<MenuController>/restaurantId
+        [HttpGet("{restaurantId}")]
+        public IActionResult Get(int restaurantId)
         {
-            var menus = db.Menus;
+            var menus = db.Menus
+                .Include(x => x.Food)
+                .Include(x => x.Restaurant)
+                .Where(x => x.RestaurantId == restaurantId)
+                ;
 
-            return menus;
-        }
-
-        // GET api/<MenuController>/5
-        [HttpGet("{restaurantCode}")]
-        public IEnumerable<Menu> Get(string restaurantCode)
-        {
-            var menus = db.Menus.Where(x => x.Restaurant != null && x.Restaurant.Code == restaurantCode);
-
-            return menus;
-        }
-
-        // POST api/<MenuController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<MenuController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<MenuController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return Ok(JsonConvert.SerializeObject(menus, Formatting.Indented));
         }
     }
 }

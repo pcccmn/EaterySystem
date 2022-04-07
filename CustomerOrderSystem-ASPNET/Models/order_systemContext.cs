@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace CustomerOrderSystem_ASPNET.Models
 {
@@ -14,6 +11,7 @@ namespace CustomerOrderSystem_ASPNET.Models
         public order_systemContext(DbContextOptions<order_systemContext> options)
             : base(options)
         {
+
         }
 
         public virtual DbSet<Menu> Menus { get; set; } = null!;
@@ -57,15 +55,17 @@ namespace CustomerOrderSystem_ASPNET.Models
                     .HasColumnType("int(11)")
                     .HasColumnName("restaurant_id");
 
-                entity.HasOne(d => d.Food)
-                    .WithMany(p => p.Menus)
-                    .HasForeignKey(d => d.FoodId)
-                    .HasConstraintName("fk-menu-food");
+                //entity.HasOne(d => d.Food)
+                    //.WithMany(p => p.Menus)
+                    //.HasForeignKey(d => d.FoodId)
+                    //.HasConstraintName("fk-menu-food")
+                    ;
 
-                entity.HasOne(d => d.Restaurant)
-                    .WithMany(p => p.Menus)
-                    .HasForeignKey(d => d.RestaurantId)
-                    .HasConstraintName("fk-menu-restaurant");
+                //entity.HasOne(d => d.Restaurant)
+                    //.WithMany(p => p.Menus)
+                    //.HasForeignKey(d => d.RestaurantId)
+                    //.HasConstraintName("fk-menu-restaurant")
+                    ;
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -86,7 +86,12 @@ namespace CustomerOrderSystem_ASPNET.Models
 
                 entity.Property(e => e.IsActive)
                     .HasColumnType("int(11)")
-                    .HasColumnName("is_active");
+                    .HasColumnName("is_active")
+                    .HasDefaultValueSql("'1'");
+
+                entity.Property(e => e.Quantity)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("quantity");
 
                 entity.Property(e => e.RestaurantId)
                     .HasColumnType("int(11)")
@@ -96,15 +101,17 @@ namespace CustomerOrderSystem_ASPNET.Models
                     .HasColumnType("int(11)")
                     .HasColumnName("table_number");
 
-                entity.HasOne(d => d.Food)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.FoodId)
-                    .HasConstraintName("fk-order-food");
+                //entity.HasOne(d => d.Food)
+                    //.WithMany(p => p.Orders)
+                    //.HasForeignKey(d => d.FoodId)
+                    //.HasConstraintName("fk-order-food")
+                    ;
 
-                entity.HasOne(d => d.Restaurant)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.RestaurantId)
-                    .HasConstraintName("fk-order-restaurant");
+                //entity.HasOne(d => d.Restaurant)
+                    //.WithMany(p => p.Orders)
+                    //.HasForeignKey(d => d.RestaurantId)
+                    //.HasConstraintName("fk-order-restaurant")
+                    ;
             });
 
             modelBuilder.Entity<RefFood>(entity =>

@@ -1,0 +1,30 @@
+@hostname = localhost
+@port = 7227
+@host = https://{{hostname}}:{{port}}/api
+@contentType = application/json
+
+
+### See restaurant's menu
+GET {{host}}/menu/1
+
+### Get list of orders
+GET {{host}}/order/1/5
+
+### Create new order
+POST {{host}}/order/new
+Content-Type:{{contentType}}
+
+{
+    "restaurant_id":1,
+    "table_number":5,
+    "foods":[
+        {
+            "food_id":1,
+            "quantity":1
+        },
+        {
+            "food_id":2,
+            "quantity":1
+        }
+    ]
+}

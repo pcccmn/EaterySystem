@@ -7,15 +7,15 @@ namespace CustomerOrderSystem_ASPNET.Models
     {
         public RefRestaurant()
         {
-            Menus = new HashSet<Menu>();
-            Orders = new HashSet<Order>();
+            //Menus = new HashSet<Menu>();
+            //Orders = new HashSet<Order>();
         }
 
         public int Id { get; set; }
         public string? Name { get; set; }
         public string? Code { get; set; }
 
-        public virtual ICollection<Menu> Menus { get; set; }
-        public virtual ICollection<Order> Orders { get; set; }
+        //public virtual ICollection<Menu> Menus { get; set; }
+        //public virtual ICollection<Order> Orders { get; set; }
     }
 }

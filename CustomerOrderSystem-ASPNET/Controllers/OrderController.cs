@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -18,66 +19,92 @@ namespace CustomerOrderSystem_ASPNET.Controllers
         {
             this.db = orderSystemContext;
         }
-
-        // GET: api/<OrderController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+       
+        // GET api/<OrderController>/5/5
+        [HttpGet("{restaurantId}/{tableNumber}")]
+        public IActionResult Get(int restaurantId, int tableNumber)
         {
-            return new string[] { "value1", "value2" };
+            var orders = db.Orders
+                .Where(x => x.RestaurantId == restaurantId && x.TableNumber == tableNumber)
+                .Include(x=>x.Food)
+                .Include(x=>x.Restaurant)
+                ;
+
+            return Ok(JsonConvert.SerializeObject(orders, Formatting.Indented));
         }
 
-        // GET api/<OrderController>/5
-        [HttpGet("{restaurantCode}/{tableNumber}")]
-        public IEnumerable<Order> Get(string restaurantCode, int tableNumber)
+        // POST api/<OrderController>/order/new
+        [HttpPost("new")]
+        public IActionResult NewOrder(JObject data)
         {
-            var orders = db.Orders.Where(x => x.Restaurant != null && x.Restaurant.Code == restaurantCode && x.TableNumber == tableNumber).ToList();
-
-            return orders;
-        }
-
-        // POST api/<OrderController>
-        [HttpPost("{restaurantCode}/{tableNumber}/{foods}")]
-        public async Task<ActionResult<IEnumerable<Order>>> Post(string restaurantCode, int tableNumber, int [] foods) // foodsOrdered must be a json
-        {
-            if (restaurantCode == null || restaurantCode.Length == 0)
-                return BadRequest("Invalid Restaurant");
-
-            if (foods == null || foods.Length == 0)
-                return BadRequest("No Foods Ordered");
-
-            RefRestaurant? restaurant = await db.RefRestaurants.FirstOrDefaultAsync(x => x.Code == restaurantCode);
-            if (restaurant == null)
+            try
             {
-                return BadRequest($"Restaurant not found with Code={restaurantCode}");
-            }
+                var objRestaurantId = data["restaurant_id"];
+                var objTableNumber = data["table_number"];
+                var objFoods = data["foods"];
 
-            foreach (var foodId in foods)
+                int restaurantId = 0;
+                int tableNumber = 0;
+
+                if (objRestaurantId == null)
+                    return BadRequest("Invalid restaurantId");
+                else if (!int.TryParse(objRestaurantId.ToString(), out restaurantId))
+                    return BadRequest("Invalid restaurantId");
+
+                if (objTableNumber == null)
+                    return BadRequest("Invalid tableNumber");
+                else if (!int.TryParse(objTableNumber.ToString(), out tableNumber))
+                    return BadRequest("Invalid tableNumber");
+
+                List<Dictionary<string, object>> listFoods;
+
+                if (objFoods == null || objFoods.ToString().Length == 0)
+                    return BadRequest("Invalid foods");
+                else
+                    try
+                    {
+                        listFoods = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(objFoods.ToString())!;                        
+                    }
+                    catch (JsonSerializationException)
+                    {
+                        return BadRequest("Invalid foods. Deserialization error");
+                    }
+
+                if (listFoods.Count == 0)
+                    return BadRequest("Invalid foods. listFood.Count == 0");
+
+                var orders = new List<Order>();
+
+                listFoods.ForEach(x =>
+                {
+                    var foodId = int.Parse(x["food_id"].ToString());
+                    var quantity = int.Parse(x["quantity"].ToString());
+
+                    orders.Add(new Order
+                    {
+                        RestaurantId = restaurantId,
+                        TableNumber = tableNumber,
+                        FoodId = foodId,
+                        Quantity = quantity
+                    });
+                });
+
+                db.Orders.AddRange(orders);
+
+                db.SaveChanges();
+
+                return Ok(JsonConvert.SerializeObject(listFoods, Formatting.Indented));
+            }
+            catch (Exception)
             {
-                var food = await db.RefFoods.FirstOrDefaultAsync(x => x.Id == foodId);
-
-                if (food == null)
-                    return BadRequest($"Food not found. foodId={foodId}");
-
-                var newOrder = new Order() { Restaurant = restaurant, TableNumber = tableNumber, Food = food };
-                db.Add(newOrder);
+                return BadRequest("Failed at NewOrder");
             }
-
-            await db.SaveChangesAsync();
-
-            return Ok(await db.Orders.ToListAsync());
-
         }
-
-        // PUT api/<OrderController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<OrderController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+      
     }
+}
+
+public class TestModel
+{
+    public RefRestaurant refRestaurant { get; set; }
 }
