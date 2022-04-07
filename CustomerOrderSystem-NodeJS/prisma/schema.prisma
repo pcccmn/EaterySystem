@@ -25,7 +25,7 @@ model order {
   table_number   Int?
   food_id        Int?
   quantity       Int?
-  is_active      Int?
+  is_active      Int?            @default(1)
   ref_food       ref_food?       @relation(fields: [food_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk-order-food")
   ref_restaurant ref_restaurant? @relation(fields: [restaurant_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk-order-restaurant")
 

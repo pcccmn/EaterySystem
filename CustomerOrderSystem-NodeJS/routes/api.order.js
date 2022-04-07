@@ -1,6 +1,36 @@
 const router = require('express').Router();
 const prisma = require('../prismainstance')
 
+router.get('/order/:restaurantId/:tableNumber', async (req, res, next) => {
+    try {
+
+        const restaurantId = req.params.restaurantId
+        const tableNumber = req.params.tableNumber
+
+        if (!restaurantId || isNaN(restaurantId))
+            throw new Error('Invalid restaurantId')
+
+        if (!tableNumber || isNaN(tableNumber) || tableNumber < 0)
+            throw new Error('Invalid tableNumber')
+
+        const orders = await prisma.order.findMany({
+            where:{
+                restaurant_id: Number(restaurantId),
+                table_number: Number(tableNumber),
+                is_active: 1
+            },
+            include:{
+                ref_food: true, // see list of food
+            }
+        })
+
+        res.json(orders)
+
+    } catch (error) {
+      next(error)
+    }
+});
+
 router.post('/order/new', async (req, res, next) => {
     try {
 
@@ -22,24 +52,25 @@ router.post('/order/new', async (req, res, next) => {
 
         const newOrdersData = []
 
-        foods.forEach(async food=>{
+        foods.forEach(food=>{
             
             const foodId = food["food_id"]
             const quantity = food["quantity"]
 
             var orderData = {
                 "restaurant_id": 5,
+                "table_number": tableNumber,
                 "food_id": foodId,
-                "quantity": quantity
+                "quantity": quantity,
             }
             newOrdersData.push(orderData);
         })
 
-        const orders = await prisma.order.createMany({
+        await prisma.order.createMany({
             data: newOrdersData
         })
 
-        res.json(orders)
+        res.json(newOrdersData)
 
     } catch (error) {
       next(error)
