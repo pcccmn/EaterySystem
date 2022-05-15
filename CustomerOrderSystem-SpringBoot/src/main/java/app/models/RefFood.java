@@ -2,6 +2,9 @@ package app.models;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import lombok.Data;
+
 import java.util.List;
 
 
@@ -10,8 +13,8 @@ import java.util.List;
  * 
  */
 @Entity
+@Data
 @Table(name="ref_food")
-@NamedQuery(name="RefFood.findAll", query="SELECT r FROM RefFood r")
 public class RefFood implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -19,26 +22,6 @@ public class RefFood implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(name = "food_name")
-	private String foodName;
-
-	public RefFood() {
-	}
-
-	public Integer getId() {
-		return this.id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getFoodName() {
-		return this.foodName;
-	}
-
-	public void setFoodName(String foodName) {
-		this.foodName = foodName;
-	}
-
+	private String name;
+	
 }

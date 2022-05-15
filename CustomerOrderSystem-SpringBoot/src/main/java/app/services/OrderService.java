@@ -7,6 +7,8 @@ import javax.persistence.EntityManagerFactory;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,8 @@ import app.models.Orders;
 @Scope("prototype")
 public class OrderService {
 
+	private static final Logger log = LoggerFactory.getLogger(OrderService.class);
+	
 	private SessionFactory sessionFactory;
 	
 	@Autowired
@@ -44,7 +48,7 @@ public class OrderService {
 			
 		} catch (Exception e) {
 			
-		} finally {
+			log.error(e.getMessage());
 			
 		}
 		

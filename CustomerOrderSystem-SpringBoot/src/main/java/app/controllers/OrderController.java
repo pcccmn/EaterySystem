@@ -23,7 +23,9 @@ public class OrderController {
 	OrderService orderService;
 	
 	@GetMapping("/api/order/{restaurantId}/{tableNumber}")
-	private ResponseEntity<List<Orders>> get(@PathVariable("restaurantId") Integer restaurantId, @PathVariable("tableNumber") Integer tableNumber ) {
+	private ResponseEntity<List<Orders>> get(
+			@PathVariable("restaurantId") Integer restaurantId, 
+			@PathVariable("tableNumber") Integer tableNumber ) {
 	
 		ResponseEntity<List<Orders>> orders = orderService.get(restaurantId, tableNumber);
 		
